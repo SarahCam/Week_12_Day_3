@@ -1,19 +1,53 @@
+// Create XHR to 'get' JSON data from API (url) & fire a callback function once the data is loaded:
+
 const makeRequest = function(url, callback){
-  const request = new XMLHttpRequest();           // XHR
-  request.open("GET", url);                       // open URL
-  request.addEventListener("load", callback)      // when it loads fire the callback function
-  request.send();                                 // send request
+  console.log("MAKING REQUEST...");
+  const request = new XMLHttpRequest();
+  request.open("GET", url);
+  request.addEventListener("load", callback)
+  request.send();
 };
 
+// If the XHR is successful (200), convert the JSON string into an object & show object details:
+
 const requestComplete = function(){
-  if(this.status !== 200) return;         // this means there has been an error, 200 means good
+  console.log("REQUEST STARTED...");
+  if(this.status !== 200) return;         
   const jsonString = this.responseText;
   const beers = JSON.parse(jsonString);
   console.log("REQUEST COMPLETE!...");
-  displayBeers(beers);
+  // displayBeerTable(beers);
+  displayBeerList(beers);
 };
 
-const displayBeers = function(beers){
+// Generate an HTML list:
+
+const displayBeerList = function(beers){
+  const beerList = document.getElementById('beer-list');
+  for(let beer of beers){
+    showItem(beer.name, beerList);
+    showItem(beer.tagline, beerList);
+    showImage(beer.image_url, beerList);
+  };
+};
+
+const showItem = function(property, list){
+  const item = document.createElement('li');
+  item.innerText = property;
+  list.appendChild(item);
+};
+
+const showImage = function(url, list){
+  const item = document.createElement('li');
+  const image = document.createElement('img');
+  image.src = url;
+  item.appendChild(image);
+  list.appendChild(item);
+};
+
+// Generate an HTML table:
+
+const displayBeerTable = function(beers){
   const beerTable = document.getElementById('beer-table');
   for(let beer of beers){
     showTable(beer, beerTable);
@@ -31,20 +65,22 @@ const showTable = function(object, table){
 const showRow = function(property, row){
   const data = document.createElement('td');
   data.innerText = property;
-  row.append(data);
+  row.appendChild(data);
 }
 
 const showRowImage = function(url, row){
   const data = document.createElement('td');
   const image = document.createElement('img');
   image.src = url;
-  data.append(image);
-  row.append(data);
+  data.appendChild(image);
+  row.appendChild(data);
 }
 
+// Main method:
 
 const app = function(){
   const url = "https://api.punkapi.com/v2/beers";
+  // const url = "https://s3-eu-west-1.amazonaws.com/brewdogapi/beers.json";
   makeRequest(url, requestComplete);
 };
 
