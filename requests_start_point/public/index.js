@@ -21,8 +21,8 @@ const displayBeers = function(beers){
 };
 
 const showTable = function(object, table){
-  console.log(object.name);
   const row = document.createElement('tr');
+  showRowImage(object.image_url, row);
   showRow(object.name, row);
   showRow(object.tagline, row);
   table.appendChild(row);
@@ -34,10 +34,18 @@ const showRow = function(property, row){
   row.append(data);
 }
 
+const showRowImage = function(url, row){
+  const data = document.createElement('td');
+  const image = document.createElement('img');
+  image.src = url;
+  data.append(image);
+  row.append(data);
+}
+
+
 const app = function(){
   const url = "https://api.punkapi.com/v2/beers";
   makeRequest(url, requestComplete);
-
 };
 
 window.addEventListener('load', app);
