@@ -96,14 +96,24 @@ const showRowImage = function(url, row){
   row.appendChild(data);
 };
 
+// Concatenate all malts into single string method:
+
+const malts = function(maltArray){
+  let maltString = "";
+  for(let malt of maltArray){
+    maltString += malt.name + "\n";
+  };
+  return maltString;
+};
+
 // Show beer method:
 
 const showBeer = function(beer){
   const beerName = document.getElementById('beer-name');
   const beerIngredientsMalt = document.getElementById('beer-ingredients-malt');
   const beerImage = document.getElementById('beer-image');
-  beerName.innerText = "BEER NAME: " + beer.name;
-  beerIngredientsMalt.innerText = "BEER MALT: " + beer.ingredients.malt[0].name;
+  beerName.innerText = beer.name;
+  beerIngredientsMalt.innerText = malts(beer.ingredients.malt);
   beerImage.src = beer.image_url;
 };
 
