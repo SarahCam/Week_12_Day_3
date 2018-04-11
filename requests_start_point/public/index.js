@@ -12,12 +12,25 @@ const makeRequest = function(url, callback){
 
 const requestComplete = function(){
   console.log("REQUEST STARTED...");
-  if(this.status !== 200) return;         
+  if(this.status !== 200) return;
   const jsonString = this.responseText;
   const beers = JSON.parse(jsonString);
   console.log("REQUEST COMPLETE!...");
   // displayBeerTable(beers);
   displayBeerList(beers);
+  displayBeerDropDown(beers);
+};
+
+// Generate an HTML dropdown list:
+
+const displayBeerDropDown = function(beers){
+  const select = document.getElementById('beer-dropdown');
+  for(let beer of beers){
+    const option = document.createElement('option');
+    option.value = beer;
+    option.innerText = beer.name;
+    select.appendChild(option);
+  }
 };
 
 // Generate an HTML list:
@@ -25,8 +38,8 @@ const requestComplete = function(){
 const displayBeerList = function(beers){
   const beerList = document.getElementById('beer-list');
   for(let beer of beers){
-    showItem(beer.name, beerList);
-    showItem(beer.tagline, beerList);
+    showItem("NAME: " + beer.name, beerList);
+    showItem("MALT: " + beer.ingredients.malt[0].name, beerList);
     showImage(beer.image_url, beerList);
   };
 };
