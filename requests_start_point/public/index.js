@@ -14,14 +14,30 @@ const requestComplete = function(){
 };
 
 const displayBeers = function(beers){
+  const beerTable = document.getElementById('beer-table');
   for(let beer of beers){
-    console.log(beer.name);
+    showTable(beer, beerTable);
   };
 };
+
+const showTable = function(object, table){
+  console.log(object.name);
+  const row = document.createElement('tr');
+  showRow(object.name, row);
+  showRow(object.tagline, row);
+  table.appendChild(row);
+};
+
+const showRow = function(property, row){
+  const data = document.createElement('td');
+  data.innerText = property;
+  row.append(data);
+}
 
 const app = function(){
   const url = "https://api.punkapi.com/v2/beers";
   makeRequest(url, requestComplete);
+
 };
 
 window.addEventListener('load', app);
