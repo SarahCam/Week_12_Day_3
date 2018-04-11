@@ -1,3 +1,5 @@
+let beerArray = [];
+
 // Create XHR to 'get' JSON data from API (url) & fire a callback function once the data is loaded:
 
 const makeRequest = function(url, callback){
@@ -16,9 +18,9 @@ const requestComplete = function(){
   const jsonString = this.responseText;
   const beers = JSON.parse(jsonString);
   console.log("REQUEST COMPLETE!...");
-  // displayBeerTable(beers);
-  displayBeerList(beers);
   displayBeerDropDown(beers);
+  // displayBeerTable(beers);
+  // displayBeerList(beers);
 };
 
 // Generate an HTML dropdown list:
@@ -30,18 +32,23 @@ const displayBeerDropDown = function(beers){
     option.value = beer;
     option.innerText = beer.name;
     select.appendChild(option);
+    beerArray.push(beer);               // Add beer to our beerArray
   }
 };
 
 // Generate an HTML list:
 
 const displayBeerList = function(beers){
-  const beerList = document.getElementById('beer-list');
   for(let beer of beers){
-    showItem("NAME: " + beer.name, beerList);
-    showItem("MALT: " + beer.ingredients.malt[0].name, beerList);
-    showImage(beer.image_url, beerList);
+    showBeerDetails(beer);
   };
+};
+
+const showBeerDetails = function(beer){
+  const beerList = document.getElementById('beer-list');
+  showItem("NAME: " + beer.name, beerList);
+  showItem("MALT: " + beer.ingredients.malt[0].name, beerList);
+  showImage(beer.image_url, beerList);
 };
 
 const showItem = function(property, list){
@@ -79,7 +86,7 @@ const showRow = function(property, row){
   const data = document.createElement('td');
   data.innerText = property;
   row.appendChild(data);
-}
+};
 
 const showRowImage = function(url, row){
   const data = document.createElement('td');
@@ -87,7 +94,18 @@ const showRowImage = function(url, row){
   image.src = url;
   data.appendChild(image);
   row.appendChild(data);
-}
+};
+
+// Show beer method:
+
+const showBeer = function(beer){
+  const beerName = document.getElementById('beer-name');
+  const beerIngredientsMalt = document.getElementById('beer-ingredients-malt');
+  const beerImage = document.getElementById('beer-image');
+  beerName.innerText = "BEER NAME: " + beer.name;
+  beerIngredientsMalt.innerText = "BEER MALT: " + beer.ingredients.malt[0].name;
+  beerImage.src = beer.image_url;
+};
 
 // Main method:
 
@@ -95,6 +113,12 @@ const app = function(){
   const url = "https://api.punkapi.com/v2/beers";
   // const url = "https://s3-eu-west-1.amazonaws.com/brewdogapi/beers.json";
   makeRequest(url, requestComplete);
+
+  const select = document.getElementById('beer-dropdown');
+  select.addEventListener("change", function(event){
+    console.log(event.target.selectedIndex);
+    showBeer(beerArray[event.target.selectedIndex]);
+  });
 };
 
 window.addEventListener('load', app);
