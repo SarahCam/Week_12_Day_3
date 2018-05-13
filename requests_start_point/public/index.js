@@ -113,7 +113,7 @@ const showBeer = function(beer){
   const beerIngredientsMalt = document.getElementById('beer-ingredients-malt');
   const beerImage = document.getElementById('beer-image');
   beerName.innerText = beer.name;
-  beerIngredientsMalt.innerText = malts(beer.ingredients.malt);
+  beerIngredientsMalt.innerText = "MALTS:\n" + malts(beer.ingredients.malt);
   beerImage.src = beer.image_url;
 };
 
